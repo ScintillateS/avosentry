@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>RoseyFlow</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+      integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+      crossorigin=""
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+      }
+    </style>
+  </head>
+  <!-- Navbar section -->
+  <nav
+    class="navbar is-fixed-top is-success"
+    role="navigation"
+    aria-label="main navigation"
+  >
+    <div class="navbar-brand">
+      <a class="navbar-item" style="padding: 30px" href="/">
+        <img
+          width="150px"
+          src="../static/images/agri-logo.png"
+          alt="AgriScan Logo"
+        />
+      </a>
+      <a
+        role="button"
+        class="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navbarLinks"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+    <div class="navbar-menu" id="navbarLinks">
+      <div class="navbar-end">
+        <a class="navbar-item" href="/scan">Soil Scan</a>
+        <a class="navbar-item" href="/map">Geographic Trends</a>
+      </div>
+    </div>
+  </nav>
+
+  <body>
+    <div id="map" style="height: 100vh; width: 100%; margin-top: 90px"></div>
+  </body>
+  <script
+    src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""
+  ></script>
+
+  <script>
+    let reports = {{ reports|tojson }};
+    reports = reports.data
+
+    // reports = [
+    // {'phoneno': '+1 9254995384', 'latitude': '0', 'longitude': '69', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 1309280313', 'latitude': '63', 'longitude': '14', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 3182092934', 'latitude': '62', 'longitude': '14', 'disease': 'Apple___Black_rot'}, 
+    // {'phoneno': '+1 4830928093', 'latitude': '61', 'longitude': '13', 'disease': 'Apple___Black_rot'},
+    // {'phoneno': '+1 3192380129', 'latitude': '67', 'longitude': '15', 'disease': 'Apple___Black_rot'}
+    // ]
+
+    var mapOptions = {
+      center: [0, 0],
+      zoom: 2,
+      zoomControl: false,
+    };
+    var map = new L.map("map", mapOptions); // Creating a map object
+
+    // Creating a Layer object
+    var layer = new L.TileLayer(
+      "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?lang=en"
+    );
+    map.addLayer(layer); // Adding layer to the map
+
+    // zoom control options
+    var zoomOptions = {
+      zoomInText: "+",
+      zoomOutText: "-",
+      position: "topleft",
+    };
+    var zoom = L.control.zoom(zoomOptions); // Creating zoom control
+    zoom.addTo(map); // Adding zoom control to the map
+
+    for (let i = 0; i < reports.length; i++) {
+      let report = reports[i];
+      let lat = report.latitude;
+      let long = report.longitude;
+
+      let plant = report.plant;
+      let condition = report.condition;
+      let healthy = report.healthy;
+
+      if (!healthy) {
+        let marker = L.marker([lat, long]).addTo(map);
+        marker.bindPopup(`<b>Plant: </b>${plant}<br><b>Disease: </b>${condition}`)      
+      }
+      
+      for (let j = i; j < reports.length; j++) {
+        if (Math.abs(lat-reports[j].latitude) <= 1 && Math.abs(long-reports[j].longitude) <= 1) {
+          let center_lat = (parseInt(lat) + parseInt(reports[j].latitude))/2 ;
+          let center_long = (parseInt(long) + parseInt(reports[j].longitude))/2 ;
+          // console.log(center_long)
+          let change_lat = (parseInt(lat) - parseInt(reports[j].latitude)) * 111045;
+          let change_long = (parseInt(long) - parseInt(reports[j].longitude)) * 111045;
+          let radius = Math.sqrt(change_lat**2 + change_long**2);
+          var circ = L.circle([center_lat, center_long], radius);
+          circ.addTo(map);
+          circ.setStyle({color: 'red'});
+        }
+      }
+    }
+
+    // L.tileLayer(urlTemplate, {
+    //   maxNativeZoom: 8,
+    //   maxZoom: 8,
+    // }).addTo(map);
+
+    // {'data': [{'phoneno': '+1 9254995384', 'latitude': '0', 'longitude': '69', 'disease': 'Apple___Black_rot'}]}
+
+  </script>
+</html>

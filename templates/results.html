@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AgriScan</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar section -->
+    {% if result[2] %}
+    <nav
+      class="navbar is-fixed-top is-success"
+      role="navigation"
+      aria-label="main navigation"
+    >
+    {% else %}
+    <nav
+      class="navbar is-fixed-top is-danger"
+      role="navigation"
+      aria-label="main navigation"
+    >
+    {% endif %}
+      <div class="navbar-brand">
+        <a class="navbar-item" style="padding: 30px" href="/">
+          <img
+            width="150px"
+            src="../static/images/agri-logo.png"
+            alt="AgriScan Logo"
+          />
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarLinks"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navbarLinks">
+        <div class="navbar-end">
+          <a class="navbar-item" href="/scan">Soil Scan</a>
+          <a class="navbar-item" href="/map">Geographic Trends</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Banner section -->
+    <section class="hero is-fullheight">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-vcentered">
+            <div class="column has-text-centered">
+              <div class="">
+                <img
+                  src="../static/images/diseases/{{result[0]}}-{{result[1]}}.jpg"
+                  width="500rem"
+                  style="border-radius: 50px; opacity: 80%"
+                  alt="Crop disease image"
+                />
+              </div>
+            </div>
+            <div class="column">
+              <br />
+              <h1
+                class="title"
+                id="titletext"
+                style="display: inline; font-weight: bold; font-size: 3rem"
+              >
+                {% if result[2] %}
+                <div class="has-background-success has-text-white">Great!</div>
+                {% else %}
+                <div class="has-background-danger has-text-white">Disease Detected</div>
+                {% endif %}
+              </h1>
+              <p style="font-weight: thin; font-size: 20px">
+                <br />
+                {% if result[2] %} 
+                Great news! Your crop looks healthy and
+                thriving. This is a result of the consistent care and attention
+                you've been providing. Remember to continue providing the
+                necessary nutrients, water, and sunlight to ensure the continued
+                health and growth of your crop. Additionally, keep an eye out
+                for any potential pests or diseases that could impact the health
+                of your crop, and take action to address them promptly if
+                necessary. Keep up the good work and congratulations on a
+                healthy crop! 
+                {% else %} 
+                We're sorry to inform you that your
+                plant has been diagnosed with <b>{{result[1]}}</b>. The good news is
+                that there are steps you can take to address the disease and
+                prevent it from spreading further, so consult an expert for
+                advice and with the right care and treatment, your plant can
+                still recover and thrive!
+                {% endif %}
+              </p>
+              <br />
+              <!-- <div class="block"></div> -->
+              <a
+                href="/scan"
+                class="button"
+                onhover=""
+                style="
+                  background-color: black;
+                  padding: 25px;
+                  border: none;
+                  border-radius: 30px;
+                  color: white;
+                  font-weight: 1000;
+                "
+              >
+                Scan another leaf
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Toggle the navbar burger menu on small screens
+      document.addEventListener("DOMContentLoaded", () => {
+        const $navbarBurgers = Array.prototype.slice.call(
+          document.querySelectorAll(".navbar-burger"),
+          0
+        );
+        if ($navbarBurgers.length > 0) {
+          $navbarBurgers.forEach((el) => {
+            el.addEventListener("click", () => {
+              const target = el.dataset.target;
+              const $target = document.getElementById(target);
+              el.classList.toggle("is-active");
+              $target.classList.toggle("is-active");
+            });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

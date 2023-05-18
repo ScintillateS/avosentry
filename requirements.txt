@@ -1,0 +1,7 @@
+Flask==2.2.3
+pymongo==4.1.1
+python-dotenv==1.0.0
+tensorflow==2.12.0
+tensorflow_intel==2.11.0
+torch==1.12.1
+twilio==7.16.4

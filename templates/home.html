@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AvoSentry</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <style>
+      body {
+        font-family: "Open Sans", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar section -->
+    <nav
+      class="navbar is-fixed-top is-success"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div class="navbar-brand">
+        <a class="navbar-item" style="padding:30px;" href="/">
+          <img width="150px" src="../static/images/agri-logo.png" alt="AgriScan Logo" />
+        </a>
+        <a
+          role="button"
+          class="navbar-burger"
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navbarLinks"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
+      </div>
+      <div class="navbar-menu" id="navbarLinks">
+        <div class="navbar-end">
+          <a class="navbar-item" href="/scan.html">Bird Scan</a>
+          <a class="navbar-item" href="/map.html">Geographic Trends</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Banner section -->
+    <section class="hero is-fullheight is-success">
+      <div class="hero-body">
+        <div class="container">
+          <div class="columns is-vcentered">
+            <div class="column">
+              <h1
+                class="title"
+                id="titletext"
+                style="display: inline; font-weight: bold; font-size: 3rem"
+              ></h1>
+              <p style="font-weight: thin; font-size: 20px">
+                <br>
+                At AvoSentry, we understand the devastating effects that avian flus
+                can have on poultry yields, farmer livelihoods, and the
+                environment. That's why we developed a platform to detect bird-borne
+                diseases using image recognition, and help farmers and consumers
+                become aware of avian diseases present throughout the globe.
+              </p>
+              <br>
+              <!-- <div class="block"></div> -->
+              <a href="/scan" class="button" onhover="" style="background-color: black; padding: 25px; border: none; border-radius: 30px; color: white; font-weight: 1000;">
+                Start analysis!
+              </a>
+            </div>
+            <div class="column has-text-centered">
+              <div class="">
+                <img
+                  src="https://images.nationalgeographic.org/image/upload/t_edhub_resource_key_image/v1638892233/EducationHub/photos/crops-growing-in-thailand.jpg"
+                  width="500rem"
+                  style="border-radius:50px; opacity:80%;"
+                  alt="Crop disease image"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // Toggle the navbar burger menu on small screens
+      document.addEventListener("DOMContentLoaded", () => {
+        const $navbarBurgers = Array.prototype.slice.call(
+          document.querySelectorAll(".navbar-burger"),
+          0
+        );
+        if ($navbarBurgers.length > 0) {
+          $navbarBurgers.forEach((el) => {
+            el.addEventListener("click", () => {
+              const target = el.dataset.target;
+              const $target = document.getElementById(target);
+              el.classList.toggle("is-active");
+              $target.classList.toggle("is-active");
+            });
+          });
+        }
+      });
+
+      function scrollToDiv(id) {
+        var div = document.getElementById(id);
+        div.scrollIntoView({ behavior: "smooth" });
+      }
+
+      var options = {
+        strings: ["Live a healthier future.", "Detect early with AgriScan."],
+        typeSpeed: 50,
+        backSpeed: 50,
+        loop: true,
+      };
+
+      var typed = new Typed("#titletext", options);
+    </script>
+  </body>
+</html>
